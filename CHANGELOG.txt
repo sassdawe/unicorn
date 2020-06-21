@@ -1,4 +1,84 @@
 ~~~~~~~~~~~~~~~~
+version 3.12
+~~~~~~~~~~~~~~~~
+
+* fix an issue where if payload was generated, it would mess up the macro generation for AMSI_BYPASS if on
+* fix an issue in Metasploit generation payload would throw a lock file error. Updating Metasploit fixes this issue and added a prompt.
+
+~~~~~~~~~~~~~~~~
+version 3.11
+~~~~~~~~~~~~~~~~
+
+* fix bug on amsi bypass 
+* break av signature chain for payload
+* add better error handling 
+* break av signature for amsi bypass
+* restructure amsi bypass code
+* add automatic evasion for opcodes
+
+~~~~~~~~~~~~~~~~
+version 3.10
+~~~~~~~~~~~~~~~~
+
+* fix issue where meterpreter would not connect back as it was not specifying port properly
+* remove error message on length size when using AMSI_BYPASS=ON
+* add better evasion against amsi
+
+~~~~~~~~~~~~~~~~
+version 3.9
+~~~~~~~~~~~~~~~~
+
+* incorporate better disable AMSI from Rasta - already encoded to get around detection https://raw.githubusercontent.com/rasta-mouse/AmsiScanBufferBypass/master/ASBBypass.ps1
+* add better evasion
+* added bypass_amsi on by default it will now generate two stages for powershell commands, you can turn this off in the unicorn.py option AMSI_BYPASS="ON" to OFF
+
+~~~~~~~~~~~~~~~~
+version 3.8.8
+~~~~~~~~~~~~~~~~ 
+
+* remove double quotes which would cause compatibility issues on prior versions of Windows 10
+* change around virtualprotect for evasion
+
+~~~~~~~~~~~~~~~~
+version 3.8.7
+~~~~~~~~~~~~~~~~
+
+* add () to bypass amsi
+
+~~~~~~~~~~~~~~~~
+version 3.8.6
+~~~~~~~~~~~~~~~~
+
+* fix escaping issue
+* fix decode python3 error
+
+~~~~~~~~~~~~~~~~
+version 3.8.5
+~~~~~~~~~~~~~~~~
+
+* add integer number for evasion
+
+~~~~~~~~~~~~~~~~
+version 3.8.4
+~~~~~~~~~~~~~~~~
+
+* split up syswow64
+
+~~~~~~~~~~~~~~~~
+version 3.8.3
+~~~~~~~~~~~~~~~~
+
+* reduce payload size by removing temporary replaces
+* add additional calloc/createthread changes to bypass signatures
+* remove print statement for shellcode
+
+~~~~~~~~~~~~~~~~
+version 3.8.2
+~~~~~~~~~~~~~~~~
+
+* add dllimport function type to get around signatures
+
+~~~~~~~~~~~~~~~~
 version 3.8.1
 ~~~~~~~~~~~~~~~~
 

